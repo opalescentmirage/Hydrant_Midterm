@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Fire Hydrant Midterm</title>
+
+    <style>
+        html, body, #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .addRecordBtn {
+            position: absolute;
+            z-index: 10;
+            top: 10px;
+            right: 10px;
+            background-color: #ec0808;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .addRecordBtn:hover {
+            background-color: #005a87;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .splash-content {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .splash-content button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #f37d91;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .splash-content button:hover {
+            background-color: #005a87;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.26/"></script>
+    <script>
+        require([
+            "esri/config", 
+            "esri/Map", 
+            "esri/views/MapView", 
+            "esri/widgets/Locate", 
+            "esri/widgets/Search", 
+            "esri/widgets/Measurement", 
+            "esri/layers/FeatureLayer",
+            "esri/Graphic",
+            "esri/widgets/Home"
+        ], (esriConfig, Map, MapView, Locate, Search, Measurement, FeatureLayer, Graphic, Home) => {
+            // Adding the API key
+            esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurEBCF4Df63a-YurcgYiKsA2mzRnRCVCS4eCeAP2yHTP5njio8im4EGxYsgq1Kpu7YuTNoghXAo8n5iQRv5CMxY0Mc7KDXtu4TNUqX0q7ffVgzNvfR4jl9Vb1bxy-9v1ft19Acri7m_UV2sKy0CT15xaNskuLWT1aJBEonvWN5w-OU-aHzsS-kXT0hQ7iB9fnTryDRgy1puzo4j7kcDroxLnggwe6U1YF1RF-hbqIdSskAT1_p7VxOLXT";
+
+            const map = new Map({
+                basemap: "satellite"
+            });
+
+            const view = new MapView({
+                center: [-82.3549, 29.6516], // Sets the center point of the view at the University of Florida
+                zoom: 15, // Sets the zoom level to clearly show the campus of the University of Florida
+                container: "viewDiv", // Reference to the DOM node that will contain the view
+                map: map // References the map object
+            });
+
+            // Create feature layer from feature service 
+            const layer = new FeatureLayer({
+                url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/survey123_a295a0d410fa459ba0d2bb38b8637ff0_results/FeatureServer"
+            });
+
+            map.add(layer);
+
+            const locateBtn = new Locate({
+                view: view
+            });
+
+            // Add the locate widget to the top left corner of the view
+            view.ui.add(locateBtn, {
+                position: "top-left"
+            });
+
+            const searchWidget = new Search({
+                view: view
+            });
+
+            // Add the search widget to the top left corner of the view
+            view.ui.add(searchWidget, {
+                position: "top-left",
+                index: 2
+            });
+
+            const HomeBtn = new Home({
+                view: view
+            });
+            view.ui.add(HomeBtn, "top-left");
+
+        });
+
+        function closeSplash() {
+            document.getElementById('splash').style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+    <a href="https://arcg.is/1HOGjT" target="_blank" class="addRecordBtn">Add Hydrant</a>
+    <div id="viewDiv"></div>
+    <div class="splash" id="splash">
+        <div class="splash-content">
+            <img src="https://static.vecteezy.com/system/resources/previews/001/188/648/non_2x/fireman-hydrant-png.png" alt="Fireman Hydrant" style="width: 200px; height: auto;">
+            <h1>Welcome to my Midterm!</h1>
+            <p>I welcome users to add fire hydrants they see at UF to the map when on campus.</p>
+            <button onclick="closeSplash()">Close</button>
+        </div>
+        
+    </div>
+</body>
+</html>
